@@ -1,2 +1,158 @@
-# STATS_IMBALANCED
-This extension improves performance with imbalanced datasets.
+<h1>STATS IMBALANCED</h1>
+
+<p>A collection of sample balancing tools based on variations of SMOTE</p>
+
+
+<h1>Introduction</h1>
+<p>
+Statistical methods that are applied to situations where a category or categories of interest are rare compared to the majority of cases, i. e., imbalanced datasets, can cause difficulty in getting a useful predictive model.  For example, if modeling the probability of a rare disease or a rare fraud with a technique like logistic regression, simply classifying all or almost all cases as not having that disease may make the best prediction in terms of the error rate.  The simple overall predictive accuracy is not appropriate in these cases.  While the statistical assumptions of the model are not violated, assuming that the estimation sample selection is not biased, so inference is still possible, as long as the model is not misspecified, the predictions are not useful.  A TREES model can take misclassification costs into account, but LOGISTIC REGRESSION , Neural Nets, and similar procedures cannot do this directly.</p>
+<p>
+While for logistic regression or discriminant analysis one can vary the cutoff probabilities to reflect the possibly larger cost of underpredicting the rare events, this does not affect the estimation process.  One could, alternatively, assign case weights, giving the rare cases a larger weight.  For example, you could weight cases in each class in inverse proportion to the class size.  This will generally produce a model that makes more predictions of the rare events, but the model may still underperform as it is not truly tuned to find the rare cases.  Some form of importance weighting reflecting the cost of misclassification errors can also be used to improve the results.</p>
+<p>
+STATS IMBALANCED produces a dataset more balanced than its input so that when models are estimated on it , the predictions for the rare events perform better even though the predictions are biased.  These methods are variations on <i>Synthetic Minority Oversampling Technique</i> (SMOTE) algorithms, including also synthetic undersampling or even combining both.  Together these are referred to as resampling.  These methods improve the balance of the dataset with respect to the target or dependent variable.</p>
+<p>
+Since the new dataset is to some degree artificial, it should not be used for inference.  One would generally estimate (train) the model on a training sample and then test it on a holdout sample.  Since you can partition the dataset into training and test samples using the standard methods in SPSS Statistics and balance the result, that process is not performed by this procedure.</p>
+<p>
+Here are a few references on SMOTE and similar techniques.</p>
+<ul>
+<li><a href="https://www.analyticsvidhya.com/blog/2020/10/overcoming-class-imbalance-using-smote-techniques">
+SMOTE for Imbalanced Classification</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Oversampling_and_undersampling_in_data_analysis">Oversampling and Undersampling in Data Analysis</a></li>
+</ul>
+<div class="syntax">
+<p>
+STATS IMBALANCED<BR>
+DEP = dependent (target) variable<sup>&#42;</sup><br/>
+INDEP = independent variables<sup>&#42;</sup><br/>
+DATASET = dataset name for output dataset<sup>&#42;</sup><br/>
+METHOD = RANDOM or BORDERLINESMOTE or SMOTE or SMOTENC or SMOTEN or 
+ SVMSMOTE or ADASYN or KMEANSSMOTE or 
+ CLUSTERCENTROIDS or RANDOMUNDERSAMPLER or ONESIDEDSELECTION or 
+ EDITEDNEARESTNEIGHBORS or ALLKNN or 
+ SMOTEENN<sup>&#42;</sup><br/>
+(one of the following)<br/>
+STRATEGY = NOTMAJORITY<sup>&#42;&#42;</sup> or  MINORITY or  NOTMINORITY or  ALL<br/>
+STRATEGYVAL = number<br/>
+STRATEGYLIST = list of categories and list of counts</p>
+<p>
+/OPTIONS<BR/>
+ALLOWMINORITY=NO<sup>&#42;&#42;</sup> or YES<br/>
+BORDERLINEKIND = TYPE1<sup>&#42;&#42;</sup> or TYPE2<br/>
+KINDSEL = ALLN<sup>&#42;&#42;</sup> or MODE<br/>
+KNEIGHBORS = integer<br/>
+MNEIGHBORS = integer<br/>
+NNEIGHBORS = integer<br/>
+OUTSTEP = number<br/>
+REPLACEMENT = NO<sup>&#42;&#42;</sup> or YES<br/>
+SEED = integer<br/>
+SHRINKAGE = number<br/>
+SUMMARIES = NO<sup>&#42;&#42;</sup> or YES<br/>
+TARGETFREQ = YES<sup>&#42;&#42;</sup> or NO<br/>
+VOTING = SOFT<sup>&#42;&#42;</sup> or HARD
+</p>
+
+<p><sup>&#42;</sup> Required<br/>
+<sup>&#42;&#42;</sup> Default</p>
+<p>STATS IMBALANCED /HELP displays this help and does nothing else.</p>
+</div>
+
+<pre class="example"><code>
+STATS IMBALANCED DATASET=z DEP=minority 
+    INDEP=salary salbegin jobtime prevexp 
+	STRATEGY=NOTMAJORITY METHOD=SVMSMOTE  
+/OPTIONS TARGETFREQ=YES.
+</code></pre>
+<pre class="example"><code>
+STATS IMBALANCED DATASET=z DEP=minority 
+    INDEP=bdate educ jobcat salary salbegin jobtime prevexp 
+	STRATEGY=MINORITY METHOD=RANDOM. 
+</code></pre>
+
+<H2>Sampling Strategies (STRATEGY, STRATEGYVAL, STRATEGYLIST)</H2>
+
+For all methods, there are several choices available for how the cases are sampled and new cases generated.  The resampling strategies are as follows.
+<UL>
+<LI> STRATEGYVAL: A fractional number:  the desired ratio of the number of cases in the minority class to the number of cases in the majority class after resampling.  For example, a value of 1 means minority and majority counts are to be equal.  This is only applicable when there are exactly two classes.</LI>
+<LI>STRATEGY:
+<UL>
+<LI>minority: resample only the minority class.</LI>
+<LI>not minority: resample all classes but the minority class</LI>
+<LI>not majority: resample all classes but the majority class</LI>
+<LI>all: resample all classes</LI>
+</UL>
+
+<LI>STRATEGYLIST: Categories and counts: resample according to a list of category values and counts of the target number of cases.  When oversampling, the case count for a category must be at least as large as the number of cases in the input category.
+List all the categories first, using quotes for text values where needed, followed by a list of counts.  For example,
+<BR/><pre>STRATEGYLIST 1 2 3 100 100 100</PRE><BR/>.  The category values are case sensitive for strings.</li>
+</ul>
+<H2>The Methods</h2>
+<p>Descriptions of the methods are adapted from the documentation for the Imbalance Python library.
+<br><a href="https://imbalanced-learn.org/stable/references/index.html">Methods</a><br>
+Details on the methods can also be found there.  See also the User Guide.<br>
+<a href="https://imbalanced-learn.org/stable/user_guide.html">User Guide</a></p>
+<p>
+Sample balance can be improved by adding cases like ones already in the small group(s) – oversampling, or by removing cases optimally from the majority group(s) – undersampling.  These methods can even be combined.  There are restrictions, which are noted below, on many of these methods concerning the types of variables that can be used.  Some methods cannot be used with string variables except for the target (dependent) variable; some cannot be used with categorical variables, and some can only be used when all variables are categorical.  In particular, SMOTE-NC and SMOTE-N handle categorical variables. You can use the SPSS AUTORECODE command to make numerical equivalents to string variables.</p>
+<P>Some methods do not accept missing values, whether user or system missing.  If they occur, those cases will be ignored for those methods.  Missing values in the target variable, however, are never permitted and
+must be excluded before running this procedure.</P>
+<P>Case weights and split files are not supported in this procedure.  Note also that it can happen that the requested sampling cannot be achieved due to the properties of the dataset.  An error message will be issued in that situation.  Target counts and proportions might not be exactly achieved, depending on the nature of the data.</P>
+
+<P><STRONG>SEED</STRONG> Seed for Random Numbers: This procedure does not use the SPSS random number generators.  It uses its own generators.  You can specify the starting seed as an integer value if you want a reproducible result.  If no seed is specified, the starting value will be, well, random.
+<P><STRONG>TARGETFREQ</STRONG>
+Display frequencies for target variable: Check to display frequencies for the target variable in the new dataset.
+<P><STRONG>SUMMARIES</STRONG> Display summaries for independent variables: Check to display summary statistics for the non-target variables in the new dataset by the target categories according to the measurement levels.
+<H3>Oversampling Methods</H3>
+<UL>
+<LI><STRONG>RANDOM</STRONG> Random Oversample: oversample the minority class(es) by picking cases at random with replacement.</LI>
+<LI><STRONG>BORDERLINESMOTE</STRONG>: variant of the original SMOTE algorithm. Borderline cases will be detected and used to generate new synthetic cases (no missing values)</LI>
+<LI><STRONG>SMOTE</STRONG> SMOTE:  Synthetic Minority Over-sampling Technique (no strings, no missing values)</LI>
+<LI><STRONG>SMOTENC</STRONG> SMOTE-NC: Synthetic Minority Over-sampling Technique for nominal and continuous variables. Unlike SMOTE, it is used for a dataset containing both numerical and categorical features: It requires at least one scale variable and one categorical variable.  (no strings, no missing values)</LI>
+<LI><STRONG>SMOTEN</STRONG> SMOTE-N: Synthetic Minority Over-sampling Technique for nominal variables. It expects that all the variables are categorical.</LI>
+<LI><STRONG>SVMSMOTE</STRONG> SVM SMOTE: Variant of the SMOTE algorithm that uses an SVM algorithm to detect cases to use for generating new synthetic cases. (no strings, no missing values)</LI>
+<LI><STRONG>KMEANSSMOTE</STRONG> K Means SMOTE: Apply KMeans clustering before oversampling using SMOTE. (no strings, no missing values)</LI>
+<LI><STRONG>ADASYN</STRONG> ADASYN: Oversample using the Adaptive Synthetic (ADASYN) algorithm.  This method is similar to SMOTE but generates different numbers of cases depending on an estimate of the local distribution of the class to be oversampled. (no strings,m no missing values)</LI>
+</UL>
+<h3>Undersampling Methods</H3>
+<LI><STRONG>CLUSTERCENTROIDS</STRONG> Cluster Centroids: Undersample the majority class by replacing a cluster of majority cases by the cluster centroid of a KMeans algorithm. This algorithm keeps N majority cases by fitting the KMeans algorithm with N clusters to the majority class and using the coordinates of the N cluster centroids as the new majority cases. (no strings, no missing values)</LI>
+<LI><STRONG>EDITEDNEARESTNEIGHBORS</STRONG> Edited Nearest Neighbors: clean the dataset by removing cases close to the decision boundary. (no strings, no missing values)</LI>
+<LI><STRONG>ALLKNN</STRONG> All KNN: apply Edited Nearest Neighbors several times and vary the number of nearest neighbors. (no strings. no missing values, no random number seed)</LI>
+<LI><STRONG>RANDOMUNDFERSAMPLER</STRONG> Random Undersample: Undersample the majority class(es) by randomly picking cases with or without replacement.
+ One-sided Selection: use Tomek links to remove noisy cases. In addition, the one nearest neighbor rule is applied to all cases, and the ones which are misclassified will be added to the set of minority cases.  A Tomek’s link exists if two cases are the nearest neighbors of each other.  See https://imbalanced-learn.org/stable/under_sampling.html#tomek-links (no strings, no missing values)</LI>
+ </UL>
+<H3>Combining Methods</H3>
+<UL>
+<LI><STRONG>SMOTEENN</STRONG> SMOTE with ENN: Combine over- and under-sampling using SMOTE and Edited Nearest Neighbors. (no strings, no missing values)</LI>
+</UL>
+<h2>Additional Parameters</H2>
+<P>Following is a list of method parameters that apply only to some of the methods.  All of these parameters have default values, which will be reported in the procedure output in most cases.  Parameters that do not apply
+to the chosen method are simply ignored if specified.</P>
+<UL>                              
+<LI><STRONG>KNEIGHBORS</STRONG> Neighborhood Size for SMOTE, SMOTE-NC, SMOTE-N, SVM SMOTE, and Borderline SMOTE: The number of nearest neighbors used to define the neighborhood of cases to use to generate the synthetic cases.</LI>                      
+<LI><STRONG>BORDERLINEKIND</STRONG> Borderline SMOTE Type: The type of SMOTE algorithm to use.  Classify each case to be 
+(i) noise (i.e. all nearest-neighbors are from a different class than the one being classified, (ii) in danger (i.e. at least half of the nearest neighbors are from the same class than the one being classified, or (iii) safe (i.e. other).   SMOTE will use the cases in danger to generate new cases. In type1 it will belong to the same class as the one of the case. type2  will consider cases  from any class.</LI>
+ <LI><STRONG>MNEIGHBORS</STRONG> Borderline SMOTE Neighbors: The number of nearest neighbors used to determine if a minority case is in danger.
+ <LI><STRONG>KINDSEL</STRONG> Case Exclusions Strategy for All KNN: Strategy to use in order to exclude cases.
+<UL>
+<LI>If alln, all neighbors have to agree with the case being classified to not be excluded.</LI>
+<LI>If mode, the majority vote of the neighbors is used in order to exclude a case.</LI>
+</UL>
+The  alln strategy is less conservative than the mode strategy. Hence, more cases will be removed in general 
+when alln is specified.</LI>
+<LI><STRONG>NNEIGHBORS</STRONG> Neighborhood Size for All KNN: Size of the neighborhood to consider in computing the nearest neighbors.</LI>
+ <LI><STRONG>ALLOWMINORITY</STRONG> ALLKNN: Majority/Minority Rule: If YES,  allows the majority classes to become the minority class without early stopping.</LI>
+ <LI><STRONG>VOTING</STRONG> Cluster Centroids Voting: Voting strategy to generate the new cases. 
+If HARD, the nearest neighbors of the centroids found using the clustering algorithm are used. 
+If SOFT, the centroids found by the clustering algorithm will are used.</LI>
+ <LI><STRONG>SVMSMOTE</STRONG> SVM SMOTE Extrapolation Step Size: The step size when extrapolating.</LI>
+ <LI><STRONG>REPLACEMENT</STRONG> Random Undersample Sampling Type: Whether the sample is with (YES) or without replacement.</LI>
+ <LI><STRONG>SHRINKAGE</STRONG> Random Oversample Shrinkage Factor: the shrinkage applied to the covariance matrix. when a smoothed bootstrap is generated. if zero, a normal bootstrap will be generated without perturbation. The shrinkage factor will be used for all classes to generate the smoothed bootstrap.</LI>
+</UL>
+<p>This command uses the Imbalanced-learn Python library, see
+Imbalanced-learn: A Python Toolbox to Tackle the Curse of Imbalanced Datasets in Machine Learning, 2017.</p>
+<p>&copy; Copyright(C) Jon K. Peck, 2023</p>
+
+</body>
+
+</html>
+
+
+
