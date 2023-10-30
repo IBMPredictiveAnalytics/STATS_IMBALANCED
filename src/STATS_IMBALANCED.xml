@@ -1,0 +1,31 @@
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jon Peck (SPSS Inc.) -->
+<Command xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="extension-1.0.xsd" Name="STATS IMBALANCED" Language="Python" LanguageVersion="3">
+	<Subcommand Name="" IsArbitrary="False" Occurrence="Optional">
+		<Parameter Name="DEP" ParameterType="VariableName"/>
+		<Parameter Name="INDEP" ParameterType="VariableNameList"/>
+		<Parameter Name="DATASET" ParameterType="VariableName"/>
+		<Parameter Name="METHOD" ParameterType="Keyword"/>
+		<Parameter Name="STRATEGY" ParameterType="TokenList"/>
+		<Parameter Name="STRATEGYVAL" ParameterType="Number"/>
+		<Parameter Name="STRATEGYLIST" ParameterType="TokenList"/>
+	</Subcommand>
+	
+	<Subcommand Name="OPTIONS">
+		<Parameter Name="SHRINKAGE" ParameterType="Number"/>
+		<Parameter Name="SEED" ParameterType="Integer"/>
+		<Parameter Name="KNEIGHBORS" ParameterType="Integer"/>
+		<Parameter Name="MNEIGHBORS" ParameterType="Integer"/>
+		<Parameter Name="NNEIGHBORS" ParameterType="Integer"/>
+		<Parameter Name="BORDERLINEKIND" ParameterType="Keyword"/>
+		<Parameter Name="ALLOWMINORITY" ParameterType="Keyword"/>
+		<Parameter Name="KINDSEL" ParameterType="Keyword"/>
+		<Parameter Name="VOTING" ParameterType="Keyword"/>
+		<Parameter Name="REPLACEMENT" ParameterType="Keyword"/>
+		<Parameter Name="IGNORETHIS" ParameterType="Keyword"/>
+		<Parameter Name="OUTSTEP" ParameterType="Number"/>
+		<Parameter Name="TARGETFREQ" ParameterType="Keyword"/>
+		<Parameter Name="SUMMARIES" ParameterType="Keyword"/>
+	</Subcommand>
+	
+	<Subcommand Name="HELP" Occurrence="Optional"/>
+</Command>
