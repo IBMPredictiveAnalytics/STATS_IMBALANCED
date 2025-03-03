@@ -1,4 +1,5 @@
 Name: STATS_IMBALANCED
+Display-Name: Imbalanced Resample
 Dialog-Specs: seed.cfe
 Command-Specs: STATS_IMBALANCED.xml
 Code-Files: STATS_IMBALANCED.py
