@@ -63,14 +63,14 @@ def doimb(dep, indep, dataset, method,
         import pandas as pd
     except:
         print(installmsg % "pandas")
-        spss.Submit("""STATS PACKAGE INSTALL /PYTHON pandas.""")
+        spss.Submit("""STATS PACKAGE INSTALL PYTHON = pandas.""")
     import pandas as pd
 
     try:
         from imblearn import over_sampling
     except:
         print(installmsg % "imblearn")
-        spss.Submit("""STATS PACKAGE INSTALL /PYTHON imbalanced-learn""")
+        spss.Submit("""STATS PACKAGE INSTALL PYTHON = imbalanced-learn""")
     
     from imblearn import over_sampling
     from imblearn import under_sampling
