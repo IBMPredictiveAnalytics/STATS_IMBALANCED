@@ -3,19 +3,21 @@ Display-Name: Imbalanced Resample
 Dialog-Specs: seed.cfe
 Command-Specs: STATS_IMBALANCED.xml
 Code-Files: STATS_IMBALANCED.py
-Misc-Files: extsyntax.css,defaultdialogicon.png,LICENSE,markdown.html
+Misc-Files: extsyntax.css,defaultdialogicon.png,STATS_IMBALANCED.htm,L
+ ICENSE,markdown.html
 Summary: resample cases to improve predictive performance for small gr
  oups
 Description: Reweight samples by oversampling or undersampling or a co
  mbination of these to improve performance on small groups.  Uses a va
  riety of SMOTE algorithms
 Author: Jon K Peck
-Version: 1.0.1
+Version: 1.0.2
 Product-Version: 24
 Date: 8/15/2023
 Categories: oversampling, undersampling, SMOTE.
 Plugins: Python
 Python-Version: 3
 Python-Modules: pandas,Imbalanced-learn,scikit-learn
+Python-Module-Versions: pandas,Imbalanced-learn,scikit-learn
 Extension-Bundles: STATS_PACKAGE_INSTALL
 Translation-Catalogues: 
